@@ -1,0 +1,49 @@
+{
+  "name": "node-docker-lifevest",
+  "version": "1.0.0",
+  "description": "A utility to fully backup or transfer a Swarm's contents",
+  "main": "src/index.js",
+  "license": "UNLICENSED",
+  "author": {
+    "name": "Trevor Robinson",
+    "url": "https://keybase.io/tpr"
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "lint": "eslint src/ test/ __mocks__/",
+    "test": "yarn run lint; jest --maxWorkers=4",
+    "test:coveralls": "yarn run test --coverage --coverageReporters=text-lcov | yarn exec coveralls",
+    "doc": "esdoc",
+    "docdev": "esdoc && serve -s docs"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx}"
+    ]
+  },
+  "repository": "https://github.com/tprobinson/docker-lifevest.git",
+  "bugs": {
+    "url": "https://github.com/tprobinson/docker-lifevest.git/issues"
+  },
+  "homepage": "https://github.com/tprobinson/docker-lifevest#readme",
+  "devDependencies": {
+    "eslint": "^5.15.3",
+    "eslint-config-standard": "^11.0.0",
+    "eslint-plugin-import": "^2.13.0",
+    "eslint-plugin-jest": "^21.21.0",
+    "eslint-plugin-node": "^7.0.1",
+    "eslint-plugin-promise": "^3.8.0",
+    "eslint-plugin-standard": "^3.1.0"
+  },
+  "dependencies": {
+    "arg": "^4.1.0",
+    "base64url": "^3.0.1",
+    "bluebird": "^3.5.3",
+    "dockerode": "^2.5.8",
+    "log4js": "^4.0.2",
+    "logger": "^0.0.1",
+    "requirefrom": "^0.2.1",
+    "simple-dockerode": "^0.2.2"
+  }
+}
