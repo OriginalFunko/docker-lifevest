@@ -41,6 +41,16 @@ const initialize = async () => {
 		return parser.help()
 	}
 
+	if( args['--verbose'] ) {
+		// Increase the log level for a step every time
+		const newLevel = logger.levels.indexOf(logger.level.levelStr.toLowerCase()) + args['--verbose']
+		logger.level = logger.levels[Math.min(logger.levels.length - 1, newLevel)]
+	}
+
+	if( args['--quiet'] ) {
+		logger.level = 'off'
+	}
+
 	// If any class needs to validate args, do so.
 	// TODO: add sidechannel errors here
 	try {
