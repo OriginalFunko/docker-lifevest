@@ -76,12 +76,12 @@ const initialize = async () => {
 	const preferredInput = args['--input'] || 'swarm'
 	const source = args['--source']
 	logger.trace(inputs)
-	const input = inputs[preferredInput].method
+	const input = inputs[preferredInput].method.bind(inputs[preferredInput])
 
 	// Configure the output class
 	const preferredOutput = args['--output'] || 'folder'
 	const destination = args['--destination'] || ('backup-' + (new Date()).toISOString())
-	const output = outputs[preferredOutput].method
+	const output = outputs[preferredOutput].method.bind(outputs[preferredOutput])
 
 	// Final validation
 	if( !source ) {
