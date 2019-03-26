@@ -12,6 +12,7 @@ const defaultArgs = {
   '--help': Boolean,
   '--verbose': arg.COUNT,
   '--quiet': Boolean,
+  '-?': '--help',
 
   // Aliases
   '-v': '--verbose',

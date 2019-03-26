@@ -23,7 +23,7 @@ A quick reference is available with `docker-lifevest --help`.
 A few common usages are below:
 
 ## Backup a Swarm
-To take a backup of a Swarm, run `docker-lifevest --source <docker swarm IP or DNS>`. A folder called `backup-<datestamp>` will be created in the current directory.
+To take a backup of a Swarm, run `docker-lifevest --source <docker swarm IP or DNS>`. A folder called `backup-<datetime>` will be created in the current directory.
 
 To change the output directory, add `--destination <new folder path>`
 
@@ -51,14 +51,14 @@ When using `--output swarm`, add this file with the `--registry-credentials <fil
 
 | Flag                 | Aliases | Default | Description                                                                                                                         |
 | -------------------- | ------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| input                | in, i   | swarm   | The type of source. Valid values are `swarm`, `folder`                                                                              |
-| source               | s       | N/A     | The source. If input is `swarm`, an IP or DNS name. If `folder`, a path to a previously created backup.                             |
-| output               | out, o  | folder  | The type of destination. Valid values are `swarm`, `folder`.                                                                        |
-| destination          | dest, d | N/A     | The destination. If output is `swarm`, an IP or DNS name. If `folder`, default is `backup-<timestamp>`                              |
-| registry-credentials | R       | N/A     | A path to a JSON file used to specify registry authentication. See [Registry Authentication](#registry-authentication) for details. |
-| verbose              | v       |         | Add up to three times to increase logging.                                                                                          |
-| quiet                | q       |         | Add to silence all logging.                                                                                                         |
-| help                 |         |         | Add to show a quick reference.                                                                                                      |
+| `--input`                | `--in`, `-i`   | swarm   | The type of source. Valid values are `swarm`, `folder`                                                                              |
+| `--source`               | `-s`       | N/A     | The source. If input is `swarm`, an IP or DNS name. If `folder`, a path to a previously created backup.                             |
+| `--output`               | `--out`, `-o`  | folder  | The type of destination. Valid values are `swarm`, `folder`.                                                                        |
+| `--destination`          | `--dest`, `-d` | N/A     | The destination. If output is `swarm`, an IP or DNS name. If `folder`, default is `backup-<timestamp>`                              |
+| `--registry-credentials` | `-R`       | N/A     | A path to a JSON file used to specify registry authentication. See [Registry Authentication](#registry-authentication) for details. |
+| `--verbose`              | `-v`       |         | Add up to three times to increase logging.                                                                                          |
+| `--quiet`                | `-q`       |         | Add to silence all logging.                                                                                                         |
+| `--help`                 | `-?`        |         | Add to show a quick reference.                                                                                                      |
 
 # Known Issues / TODO
 
