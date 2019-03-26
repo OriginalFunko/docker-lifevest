@@ -4,95 +4,96 @@ const Promise = require('bluebird')
 global.Promise = Promise
 
 process.on('unhandledRejection', function(reason, promise) {
-	console.error('unhandledRejection:', reason, promise)
+  console.error('unhandledRejection:', reason, promise)
 })
 
 const requireFrom = require('requirefrom')
-const requireLib = requireFrom('lib')
-const requireUtil = requireFrom('lib/utils')
+const requireLib = requireFrom('src/lib')
+const requireUtil = requireFrom('src/lib/utils')
 const logger = requireLib('logger')
 const getAllClassesOfType = requireUtil('getAllClassesOfType')
 
 const ArgParser = requireLib('parseArgs')
 
 const main = async (input, source, output, destination) => {
-	const data = await input(source)
-	output(destination, data)
+  const data = await input(source)
+  output(destination, data)
 }
 
 const initialize = async () => {
-	// Initialize all classes to retrieve dynamic flags and help text
-	let inputs, outputs
-	try {
-		inputs = await getAllClassesOfType('input')
-		outputs = await getAllClassesOfType('output')
-	} catch (e) {
-		// give a little more info from sidechannel
-		if( 'sidechannel' in e ) {
-			logger.fatal(...e.sidechannel, e)
-		}
-		throw e
-	}
+  // Initialize all classes to retrieve dynamic flags and help text
+  let inputs, outputs
+  try {
+    inputs = await getAllClassesOfType('input')
+    outputs = await getAllClassesOfType('output')
+  } catch (e) {
+    // give a little more info from sidechannel
+    if( 'sidechannel' in e ) {
+      logger.fatal(...e.sidechannel, e)
+    }
+    throw e
+  }
 
-	const parser = new ArgParser([...Object.values(inputs), ...Object.values(outputs)])
-	const args = parser.parse()
+  const parser = new ArgParser([...Object.values(inputs), ...Object.values(outputs)])
+  const args = parser.parse()
 
-	if( args['--help'] ) {
-		return parser.help()
-	}
+  if( args['--help'] ) {
+    return parser.help()
+  }
 
-	if( args['--verbose'] ) {
-		// Increase the log level for a step every time
-		const newLevel = logger.levels.indexOf(logger.level.levelStr.toLowerCase()) + args['--verbose']
-		logger.level = logger.levels[Math.min(logger.levels.length - 1, newLevel)]
-	}
+  if( args['--verbose'] ) {
+    // Increase the log level for a step every time
+    while( args['--verbose'] > 0 ) {
+      logger.raiseLevel()
+      args['--verbose'] -= 1
+    }
+  }
 
-	if( args['--quiet'] ) {
-		logger.level = 'off'
-	}
+  if( args['--quiet'] ) {
+    logger.silence()
+  }
 
-	// If any class needs to validate args, do so.
-	// TODO: add sidechannel errors here
-	try {
-		await Promise.each(Object.keys(inputs), key => {
-			if( 'validateArgs' in inputs[key] ) {
-				return inputs[key].validateArgs(args)
-			}
-			return true
-		})
+  // If any class needs to validate args, do so.
+  try {
+    await Promise.each(Object.keys(inputs), key => {
+      if( args['--input'] === key && 'validateArgs' in inputs[key] ) {
+        return inputs[key].validateArgs(args)
+      }
+      return true
+    })
 
-		await Promise.each(Object.keys(outputs), key => {
-			if( 'validateArgs' in outputs[key] ) {
-				return outputs[key].validateArgs(args)
-			}
-			return true
-		})
-	} catch (e) {
-		await parser.help()
-		throw e
-	}
+    await Promise.each(Object.keys(outputs), key => {
+      if( args['--output'] === key && 'validateArgs' in outputs[key] ) {
+        return outputs[key].validateArgs(args)
+      }
+      return true
+    })
+  } catch (e) {
+    await parser.help()
+    throw e
+  }
 
-	// Configure the input class
-	const preferredInput = args['--input'] || 'swarm'
-	const source = args['--source']
-	logger.trace(inputs)
-	const input = inputs[preferredInput].method.bind(inputs[preferredInput])
+  // Configure the input class
+  const preferredInput = args['--input'] || 'swarm'
+  const source = args['--source']
+  logger.trace(inputs)
+  const input = inputs[preferredInput].method.bind(inputs[preferredInput])
 
-	// Configure the output class
-	const preferredOutput = args['--output'] || 'folder'
-	const destination = args['--destination'] || ('backup-' + (new Date()).toISOString())
-	const output = outputs[preferredOutput].method.bind(outputs[preferredOutput])
+  // Configure the output class
+  const preferredOutput = args['--output'] || 'folder'
+  const destination = args['--destination'] || ('backup-' + (new Date()).toISOString())
+  const output = outputs[preferredOutput].method.bind(outputs[preferredOutput])
 
-	// Final validation
-	if( !source ) {
-		throw new Error('No source specified, must pass --source flag!')
-	}
+  // Final validation
+  if( !source ) {
+    throw new Error('No source specified, must pass --source flag!')
+  }
 
-	// Start actual work
-	return main(input, source, output, destination)
+  // Start actual work
+  return main(input, source, output, destination)
 }
 
 initialize().catch(err => {
-	logger.error(err)
-	process.exit(1)
+  logger.error(err)
+  process.exit(1)
 })

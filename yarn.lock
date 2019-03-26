@@ -266,7 +266,7 @@ docker-modem@^1.0.8:
     readable-stream "~1.0.26-4"
     split-ca "^1.0.0"
 
-dockerode@^2.5.3, dockerode@^2.5.8:
+dockerode@^2.5.3:
   version "2.5.8"
   resolved "https://registry.yarnpkg.com/dockerode/-/dockerode-2.5.8.tgz#1b661e36e1e4f860e25f56e0deabe9f87f1d0acc"
   integrity sha512-+7iOUYBeDTScmOmQqpUYQaE7F4vvIt6+gIZNHWhqAQEI887tiPFB9OvXI/HzQYqfUNvukMK+9myLW63oTJPZpw==
@@ -779,11 +779,6 @@ log4js@^4.0.2:
     flatted "^2.0.0"
     rfdc "^1.1.2"
     streamroller "^1.0.1"
-
-logger@^0.0.1:
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/logger/-/logger-0.0.1.tgz#cb08171f8a6f6f674b8499dadf50bed4befb72c4"
-  integrity sha1-ywgXH4pvb2dLhJna31C+1L77csQ=
 
 mimic-fn@^1.0.0:
   version "1.2.0"

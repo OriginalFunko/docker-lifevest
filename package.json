@@ -1,13 +1,14 @@
 {
-  "name": "node-docker-lifevest",
+  "name": "docker-lifevest",
   "version": "1.0.0",
-  "description": "A utility to fully backup or transfer a Swarm's contents",
+  "description": "A utility to backup or transfer a Docker Swarm.",
   "main": "src/index.js",
   "license": "UNLICENSED",
   "author": {
     "name": "Trevor Robinson",
     "url": "https://keybase.io/tpr"
   },
+  "bin": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
     "lint": "eslint src/ test/ __mocks__/",
@@ -40,9 +41,7 @@
     "arg": "^4.1.0",
     "bluebird": "^3.5.3",
     "chalk": "^2.4.2",
-    "dockerode": "^2.5.8",
     "log4js": "^4.0.2",
-    "logger": "^0.0.1",
     "requirefrom": "^0.2.1",
     "simple-dockerode": "^0.2.2"
   }

@@ -4,54 +4,53 @@ const arg = require('arg')
 const chalk = require('chalk')
 
 const requireFrom = require('requirefrom')
-const requireUtil = requireFrom('lib/utils')
+const requireUtil = requireFrom('src/lib/utils')
 const h = requireUtil('helpHelper')
 
 const defaultArgs = {
-	// Types
-	'--help': Boolean,
-	'--verbose': arg.COUNT,
-	'--quiet': Boolean,
+  // Types
+  '--help': Boolean,
+  '--verbose': arg.COUNT,
+  '--quiet': Boolean,
 
-	// Aliases
-	'-v': '--verbose',
-	'-q': '--quiet',
+  // Aliases
+  '-v': '--verbose',
+  '-q': '--quiet',
 
-	'--input': String,
-	'--source': String,
-	'-i': '--input',
-	'--in': '--input',
-	'-s': '--source',
+  '--input': String,
+  '--source': String,
+  '-i': '--input',
+  '--in': '--input',
+  '-s': '--source',
 
-	'--output': String,
-	'--destination': String,
-	'-o': '--output',
-	'--out': '--output',
-	'-d': '--destination',
-	'--dest': '--destination',
+  '--output': String,
+  '--destination': String,
+  '-o': '--output',
+  '--out': '--output',
+  '-d': '--destination',
+  '--dest': '--destination',
 }
 
 class ArgParser {
-	constructor(classes) {
-		this.otherArgs = []
-		this.otherHelps = []
+  constructor(classes) {
+    this.otherArgs = []
+    this.otherHelps = []
 
-		classes.forEach(item => {
-			if( 'args' in item ) { this.otherArgs.push(item.args) }
-			if( 'argsHelp' in item ) { this.otherHelps.push(item.argsHelp) }
-		})
-	}
+    classes.forEach(item => {
+      if( 'args' in item ) { this.otherArgs.push(item.args) }
+      if( 'argsHelp' in item ) { this.otherHelps.push(item.argsHelp) }
+    })
+  }
 
-	parse() {
-		const args = arg(Object.assign({}, defaultArgs, ...this.otherArgs))
-		return args
-	}
+  parse() {
+    const args = arg(Object.assign({}, defaultArgs, ...this.otherArgs))
+    return args
+  }
 
-	async help() {
-		const validInputs = await fs.readdirAsync(path.join(__dirname, 'input'))
-		const validOutputs = await fs.readdirAsync(path.join(__dirname, 'output'))
+  async help() {
+    const validInputs = await fs.readdirAsync(path.join(__dirname, 'input'))
+    const validOutputs = await fs.readdirAsync(path.join(__dirname, 'output'))
 
-/* eslint-disable indent */
     console.log(`
 ${h.header('docker-lifevest')} [--input type] --source sourceIPOrDir [--output type] [--destination destIPOrDir]
 
@@ -88,8 +87,7 @@ ${h.header('docker-lifevest')} [--input type] --source sourceIPOrDir [--output t
     To restore a Swarm from a folder:
     -i folder -s backup-20XX-01-01T00:00:00.000Z -o swarm -d destIP
 `.trim())
-    /* eslint-enable indent */
-	}
+  }
 }
 
 module.exports = ArgParser

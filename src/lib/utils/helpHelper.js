@@ -7,9 +7,9 @@ const required = () => chalk.yellow('Required')
 const em = chalk.green
 
 module.exports = {
-	header,
-	flag,
-	optional,
-	required,
-	em,
+  header,
+  flag,
+  optional,
+  required,
+  em,
 }
