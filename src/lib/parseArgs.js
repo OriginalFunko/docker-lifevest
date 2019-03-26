@@ -53,7 +53,7 @@ class ArgParser {
     const validOutputs = await fs.readdirAsync(path.join(__dirname, 'output'))
 
     console.log(`
-${h.header('docker-lifevest')} [--input type] --source sourceIPOrDir [--output type] [--destination destIPOrDir]
+${h.header(path.basename(process.argv[1], '.js'))} [--input type] --source sourceIPOrDir [--output type] [--destination destIPOrDir]
 
   This program can backup and restore the configuration of a Docker Swarm.
   To use, specify a source and destination.

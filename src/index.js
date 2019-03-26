@@ -35,7 +35,14 @@ const initialize = async () => {
   }
 
   const parser = new ArgParser([...Object.values(inputs), ...Object.values(outputs)])
-  const args = parser.parse()
+
+  let args
+  try {
+    args = parser.parse()
+  } catch (e) {
+    await parser.help()
+    throw e
+  }
 
   if( args['--help'] ) {
     return parser.help()
@@ -86,6 +93,7 @@ const initialize = async () => {
 
   // Final validation
   if( !source ) {
+    await parser.help()
     throw new Error('No source specified, must pass --source flag!')
   }
 
@@ -94,6 +102,6 @@ const initialize = async () => {
 }
 
 initialize().catch(err => {
-  logger.error(err)
+  logger.fatal(err)
   process.exit(1)
 })
