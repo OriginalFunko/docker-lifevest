@@ -86,7 +86,7 @@ ${h.header('docker-lifevest')} [--input type] --source sourceIPOrDir [--output t
     -s sourceIP -o swarm -d destIP
 
     To restore a Swarm from a folder:
-    -i folder -s backup-20XX-01-01T00:00:00.000Z -o swarm -d destIP
+    -i folder -s backup-20XX-01-01T00-00-00-000Z -o swarm -d destIP
 `.trim())
   }
 }

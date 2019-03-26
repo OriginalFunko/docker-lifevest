@@ -17,7 +17,7 @@ const myArgs = {
 }
 
 const myArgsHelp = `
-    ${h.flag('--registry-credentials|-R')}: the location of a JSON file for Swarm.
+    ${h.flag('--registry-credentials|-R')}: the location of a JSON file for Swarm auth.
       ${h.optional()}, default is '${h.em('registry-credentials.json')}'
       Adds authentication to all services restored
       Must contain a JSON object following registry authentication format.

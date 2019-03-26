@@ -3,7 +3,7 @@ const path = require('path')
 
 class FolderOutput {
   async method (destination, data) {
-    const date = (new Date()).toISOString()
+    const date = (new Date()).toISOString().replace(/:|\./g, '-')
     const folder = `backup-${date}`
 
     const services = path.join(folder, 'services')
