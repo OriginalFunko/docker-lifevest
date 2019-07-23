@@ -1,4 +1,5 @@
-const url = require('url')
+const urlParseLax = require('url-parse-lax')
+const qs = require('querystring')
 
 // Default options for Docker host URL structure
 const defaultHostOptions = {
@@ -9,11 +10,29 @@ const defaultHostOptions = {
 
 module.exports = function parse(input) {
   // Set up Dockerode
-  const parsedHostUrl = url.parse(input)
-  if( parsedHostUrl.host === null && parsedHostUrl.pathname !== null ) {
-    // Plain hostname parses wrong.
-    return Object.assign({}, defaultHostOptions, {host: parsedHostUrl.pathname})
+  const parsedHostUrl = urlParseLax(input, { https: false })
+
+  const options = {
+    protocol: parsedHostUrl.protocol,
+    host: parsedHostUrl.hostname,
   }
 
-  return Object.assign({}, defaultHostOptions, parsedHostUrl)
+  // The parser library tends to default to port 80 when Docker's default is 2375.
+  // Only include explicitly specified ports.
+  if( input.includes(`:${parsedHostUrl.port}`) ) {
+    options.port = parsedHostUrl.port
+  }
+
+  // Remove trailing colon on protocol
+  if( options.protocol && options.protocol.endsWith(':') ) {
+    options.protocol = options.protocol.slice(0, -1)
+  }
+
+  // Merge query parameters to the main object if they exist.
+  if( 'query' in parsedHostUrl && parsedHostUrl.query ) {
+    const parsedQuery = qs.parse(parsedHostUrl.query)
+    Object.assign(options, parsedQuery)
+  }
+
+  return Object.assign({}, defaultHostOptions, options)
 }

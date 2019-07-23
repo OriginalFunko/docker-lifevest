@@ -12,6 +12,7 @@ A utility to backup or transfer a Docker Swarm.
 - [Registry Authentication](#registry-authentication)
 - [Flags](#flags)
 - [Known Issues / TODO](#known-issues--todo)
+- [License](#license)
 <!-- TOC END -->
 
 # Why should I use this?
@@ -24,7 +25,7 @@ Lifevest creates plain JSON backups that are reconstructed from scratch upon res
 
 Install this utility by running:
 ```bash
-npm install -g docker-lifevest
+npm install -g @originalfunko/docker-lifevest
 ```
 
 A quick reference is available with `docker-lifevest --help`.
@@ -96,16 +97,17 @@ When using `--output swarm`, add this file with the `--registry-credentials <fil
 
 # Flags
 
-| Flag                 | Aliases | Default | Description                                                                                                                         |
-| -------------------- | ------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| Flag                     | Aliases        | Default | Description                                                                                                                         |
+| ------------------------ | -------------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------- |
 | `--input`                | `--in`, `-i`   | swarm   | The type of source. Valid values are `swarm`, `folder`                                                                              |
-| `--source`               | `-s`       | N/A     | The source. If input is `swarm`, an IP or DNS name. If `folder`, a path to a previously created backup.                             |
+| `--source`               | `-s`           | N/A     | The source. If input is `swarm`, an IP or DNS name. If `folder`, a path to a previously created backup.                             |
 | `--output`               | `--out`, `-o`  | folder  | The type of destination. Valid values are `swarm`, `folder`.                                                                        |
 | `--destination`          | `--dest`, `-d` | N/A     | The destination. If output is `swarm`, an IP or DNS name. If `folder`, default is `backup-<timestamp>`                              |
-| `--registry-credentials` | `-R`       | N/A     | A path to a JSON file used to specify registry authentication. See [Registry Authentication](#registry-authentication) for details. |
-| `--verbose`              | `-v`       |         | Add up to three times to increase logging.                                                                                          |
-| `--quiet`                | `-q`       |         | Add to silence all logging.                                                                                                         |
-| `--help`                 | `-?`        |         | Add to show a quick reference.                                                                                                      |
+| `--registry-credentials` | `-R`           | N/A     | A path to a JSON file used to specify registry authentication. See [Registry Authentication](#registry-authentication) for details. |
+| `--verbose`              | `-v`           |         | Add up to three times to increase logging.                                                                                          |
+| `--quiet`                | `-q`           |         | Add to silence all logging.                                                                                                         |
+| `--help`                 | `-?`           |         | Add to show a quick reference.                                                                                                      |
+| `--porcelain`            |                |         | Mainly used for test suite, will make the script output a JSON blob of source and destination paths.                                |
 
 # Known Issues / TODO
 
@@ -114,3 +116,7 @@ Currently only services, configs, and secrets are backed up. More object types m
 TLS support for Docker access.
 
 Per-service registry authentication
+
+# License
+
+This software is licensed under the [Mozilla Public License 2.0](https://www.tldrlegal.com/l/mpl-2.0). The full text of the license is [included](LICENSE.md) with this software.

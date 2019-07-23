@@ -1,34 +1,27 @@
-const fs = require('bluebird').promisifyAll(require('fs'))
+const fs = require('fs')
 const path = require('path')
 
 class FolderOutput {
   async method (destination, data) {
-    const date = (new Date()).toISOString().replace(/:|\./g, '-')
-    const folder = `backup-${date}`
+    const services = path.join(destination, 'services')
+    const configs = path.join(destination, 'configs')
+    const secrets = path.join(destination, 'secrets')
 
-    const services = path.join(folder, 'services')
-    const configs = path.join(folder, 'configs')
-    const secrets = path.join(folder, 'secrets')
+    fs.mkdirSync(destination)
+    fs.mkdirSync(services)
+    fs.mkdirSync(configs)
+    fs.mkdirSync(secrets)
 
-    await fs.mkdirAsync(folder)
-    await Promise.all([
-      fs.mkdirAsync(services),
-      fs.mkdirAsync(configs),
-      fs.mkdirAsync(secrets),
-    ])
+    const writeAll = subfolder =>
+      Object.keys(data[subfolder])
+        .forEach(key => fs.writeFileSync(
+          path.join(destination, subfolder, key),
+          JSON.stringify(data[subfolder][key]),
+        ))
 
-    const writeAll = subfolder => {
-      return Promise.each(Object.keys(data[subfolder]), key => fs.writeFileAsync(
-        path.join(folder, subfolder, key),
-        JSON.stringify(data[subfolder][key]),
-      ))
-    }
-
-    return Promise.all([
-      writeAll('services'),
-      writeAll('configs'),
-      writeAll('secrets'),
-    ])
+    writeAll('services')
+    writeAll('configs')
+    writeAll('secrets')
   }
 }
 

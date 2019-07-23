@@ -1,48 +1,74 @@
 {
-  "name": "docker-lifevest",
+  "name": "@originalfunko/docker-lifevest",
   "version": "1.0.0",
   "description": "A utility to backup or transfer a Docker Swarm.",
   "main": "src/index.js",
-  "license": "UNLICENSED",
-  "author": {
-    "name": "Trevor Robinson",
-    "url": "https://keybase.io/tpr"
-  },
+  "license": "MPL-2.0",
+  "author": "tprobinson (https://github.com/tprobinson)",
   "bin": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
-    "lint": "eslint src/ test/ __mocks__/",
-    "test": "yarn run lint; jest --maxWorkers=4",
+    "lint": "eslint src/ test/",
+    "test": "yarn run lint; node test/test_setup.js; jest --maxWorkers=4",
     "test:coveralls": "yarn run test --coverage --coverageReporters=text-lcov | yarn exec coveralls",
     "doc": "esdoc",
     "docdev": "esdoc && serve -s docs"
   },
+  "files": [
+    "src/**"
+  ],
   "jest": {
     "testEnvironment": "node",
     "collectCoverageFrom": [
-      "src/**/*.{js,jsx}"
+      "src/**/*.{js,jsx}",
+      "!src/index.js"
     ]
   },
-  "repository": "https://github.com/tprobinson/docker-lifevest.git",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/OriginalFunko/docker-lifevest.git"
+  },
   "bugs": {
-    "url": "https://github.com/tprobinson/docker-lifevest.git/issues"
+    "url": "https://github.com/OriginalFunko/docker-lifevest"
   },
-  "homepage": "https://github.com/tprobinson/docker-lifevest#readme",
-  "devDependencies": {
-    "eslint": "^5.15.3",
-    "eslint-config-standard": "^11.0.0",
-    "eslint-plugin-import": "^2.13.0",
-    "eslint-plugin-jest": "^21.21.0",
-    "eslint-plugin-node": "^7.0.1",
-    "eslint-plugin-promise": "^3.8.0",
-    "eslint-plugin-standard": "^3.1.0"
-  },
+  "homepage": "https://github.com/OriginalFunko/docker-lifevest",
   "dependencies": {
     "arg": "^4.1.0",
     "bluebird": "^3.5.3",
     "chalk": "^2.4.2",
     "log4js": "^4.0.2",
     "requirefrom": "^0.2.1",
-    "simple-dockerode": "^0.2.2"
+    "simple-dockerode": "^0.2.2",
+    "url-parse-lax": "^3.0.0"
+  },
+  "devDependencies": {
+    "babel-jest-assertions": "^0.1.0",
+    "eslint": "*",
+    "eslint-config-standard": "*",
+    "eslint-plugin-import": "*",
+    "eslint-plugin-jest": "*",
+    "eslint-plugin-jsdoc": "*",
+    "eslint-plugin-node": "*",
+    "eslint-plugin-promise": "*",
+    "eslint-plugin-standard": "*",
+    "execa": "^2.0.3",
+    "get-unused-port": "^1.0.1",
+    "jest": "^24.8.0",
+    "jest-mock-process": "^1.2.0",
+    "random-words": "^1.1.0",
+    "temp": "^0.9.0"
+  },
+  "keywords": [
+    "backup",
+    "docker",
+    "funko",
+    "rescue",
+    "restore",
+    "swarm",
+    "transfer",
+    "utility"
+  ],
+  "engines": {
+    "node": ">=8.3.0"
   }
 }

@@ -63,12 +63,14 @@ class SwarmInput {
             /* eslint-disable indent */
             Command: ['sh', '-c'].concat([
               'echo -----BEGIN-----',
-              'for i in /*.secret',
-                'do echo $i',
-                'base64 $i',
-                'echo',
-                'echo -----NEXT-----',
-              'done',
+              'if ls /*.secret &>/dev/null',
+                'then for i in /*.secret',
+                  'do echo $i',
+                  'base64 $i',
+                  'echo',
+                  'echo -----NEXT-----',
+                'done',
+              'fi',
               'echo -----END-----',
             ].join('; ')),
             /* eslint-enable indent */
@@ -92,11 +94,17 @@ class SwarmInput {
         let logsFinished = false
         let tries = 30
         while( !logsFinished && tries > 0 ) {
-          logs = await secretService.logs({stdout: true})
+          logs = await secretService.logs({ stdout: true })
 
           if( logs.includes('-----END-----') ) {
             logsFinished = true
             logger.trace('Logging completed, raw data:', logs)
+          } else if( logs.includes('incomplete log stream') ) {
+            logger.fatal('Lifevest was unable to retrieve service logs via the Docker API!')
+            logger.fatal('This may be related to a known bug in Swarm that breaks service logging after some time.')
+            logger.fatal('If this error persists, try reducing your Swarm to a single manager and pointing Lifevest at that manager.')
+            logger.trace('Received raw log data:', logs)
+            throw new Error('Lifevest was unable to retrieve service logs via the Docker API!')
           } else {
             tries--
             logger.trace('Waiting 1 sec. Remaining tries:', tries)
@@ -153,7 +161,7 @@ class SwarmInput {
       await cleanupSecretService()
     }
 
-    return {services, configs, secrets}
+    return { services, configs, secrets }
   }
 }
 

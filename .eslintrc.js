@@ -1,5 +1,5 @@
 module.exports = {
-    extends: ["standard", "plugin:jest/recommended"],
+    extends: ["standard", "plugin:jest/recommended", "plugin:jsdoc/recommended"],
     rules: {
       "keyword-spacing": ["error", {
         "before": true, "after": true, "overrides": {

@@ -24,6 +24,8 @@ const myArgsHelp = `
       See '${h.em('https://docs.docker.com/engine/api/v1.37/#section/Authentication')}'
 `
 
+const defaultCredsPath = 'registry-credentials.json'
+
 class SwarmOutput {
   constructor() {
     this.args = myArgs
@@ -33,18 +35,22 @@ class SwarmOutput {
 
   async validateArgs(args) {
     // Configure registry authentication
-    const credsPath = args['--registry-credentials']
-    if( credsPath ) {
-      // Try to read the file.
-      try {
-        logger.trace('Trying to read credentials file at', credsPath)
-        const creds = await fs.readFileAsync(credsPath)
-        logger.trace('Got content:', creds)
-        this.registryAuth = JSON.parse(creds)
-      } catch (e) {
-        logger.fatal(`Could not read ${credsPath}:`)
-        throw e
+    const credsPath = args['--registry-credentials'] || defaultCredsPath
+
+    // Try to read the file.
+    try {
+      logger.trace('Trying to read credentials file at', credsPath)
+      const creds = await fs.readFileAsync(credsPath)
+      logger.trace('Got content:', creds)
+      this.registryAuth = JSON.parse(creds)
+    } catch (e) {
+      // If the user did not specify a file and we couldn't find the default, ignore the error.
+      if( e.code === 'ENOENT' && credsPath === defaultCredsPath ) {
+        return
       }
+
+      logger.fatal(`Could not read ${credsPath}:`)
+      throw e
     }
   }
 
@@ -64,8 +70,8 @@ class SwarmOutput {
         logger.info(`Config ${key} already exists.`)
         newId = existingConfig.ID
       } else {
-        const res = await docker.createConfig(data.configs[key])
-        newId = res.Id
+        const newConfig = await docker.createConfig(data.configs[key])
+        newId = newConfig.id
       }
 
       newConfigIdMapping[key] = newId

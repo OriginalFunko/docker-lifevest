@@ -8,11 +8,10 @@ const requireUtil = requireFrom('src/lib/utils')
 const h = requireUtil('helpHelper')
 
 const defaultArgs = {
-  // Types
   '--help': Boolean,
   '--verbose': arg.COUNT,
   '--quiet': Boolean,
-  '-?': '--help',
+  '--porcelain': Boolean,
 
   // Aliases
   '-v': '--verbose',
@@ -43,8 +42,14 @@ class ArgParser {
     })
   }
 
-  parse() {
-    const args = arg(Object.assign({}, defaultArgs, ...this.otherArgs))
+  parse(providedArgs) {
+    const parseOptions = {}
+
+    if( providedArgs ) {
+      parseOptions.argv = providedArgs
+    }
+
+    const args = arg(Object.assign({}, defaultArgs, ...this.otherArgs), parseOptions)
     return args
   }
 
@@ -77,6 +82,8 @@ ${h.header(path.basename(process.argv[1], '.js'))} [--input type] --source sourc
       Default is '${chalk.red('error')}', next steps are ${chalk.yellow('warn')}, ${chalk.green('info')}, ${chalk.cyan('debug')}, ${chalk.blue('trace')}.
 
     ${h.flag('--quiet|-q')}: Silences all logging.
+
+    ${h.flag('--porcelain')}: Silences all logging except for a final JSON payload.
 
   ${h.header('Recipes:')}
     To backup a Swarm to a folder:
