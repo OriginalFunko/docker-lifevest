@@ -36,7 +36,7 @@
     "arg": "^4.1.0",
     "bluebird": "^3.5.3",
     "chalk": "^2.4.2",
-    "log4js": "^4.0.2",
+    "log4js": "^6.4.0",
     "requirefrom": "^0.2.1",
     "simple-dockerode": "^0.2.2",
     "url-parse-lax": "^3.0.0"
